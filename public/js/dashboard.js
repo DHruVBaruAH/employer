@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Check if user is logged in
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (!isLoggedIn) {
-        window.location.href = "index.html";
+        window.location.href = "../../index.html";
         return;
     }
 
@@ -228,7 +228,7 @@ async function updateEmployeeData() {
 // Helper function to update UI with employee data
 function updateUIWithEmployeeData(data) {
     // Update profile section
-    document.getElementById('profileAvatar').src = data.avatarUrl || 'img/avatar.png';
+    document.getElementById('profileAvatar').src = data.avatarUrl || '../img/avatar.png';
     document.getElementById('employeeName').textContent = data.name;
     document.getElementById('employeeId').textContent = data.employeeId;
     document.getElementById('employeeEmail').textContent = data.email;

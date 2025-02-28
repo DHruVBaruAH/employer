@@ -130,13 +130,13 @@ document.getElementById('signupForm').addEventListener('submit', async function(
                 joiningDate: formData.joiningDate,
                 birthDate: formData.birthDate,
                 degree: formData.degree,
-                avatar: 'img/avatar.png'
+                avatar: '../img/avatar.png'
             };
             
             localStorage.setItem('userProfile', JSON.stringify(profileData));
             
             // Redirect to dashboard
-            window.location.href = 'dashboard.html';
+            window.location.href = './dashboard.html';
         } else {
             throw new Error(data.message || 'Registration failed');
         }
