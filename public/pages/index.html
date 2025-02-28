@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>HR Management System - Sign In</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        padding: 2rem;
+      }
+
+      .login-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .login-header h1 {
+        color: #2c3e50;
+        margin: 0;
+        font-size: 1.75rem;
+      }
+
+      .login-header p {
+        color: #666;
+        margin: 0.5rem 0 0;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: 500;
+      }
+
+      .input-group {
+        position: relative;
+      }
+
+      .input-group i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.5rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+      }
+
+      .btn-signin {
+        width: 100%;
+        padding: 0.75rem;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-signin:hover {
+        background: #2980b9;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .loading i {
+        color: #3498db;
+        animation: spin 1s linear infinite;
+      }
+
+      .signup-link {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #eee;
+      }
+
+      .signup-link p {
+        color: #666;
+        margin: 0;
+      }
+
+      .signup-link a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .signup-link a:hover {
+        text-decoration: underline;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <h1>Welcome Back</h1>
+          <p>Sign in to access your dashboard</p>
+        </div>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="employeeId">Employee ID</label>
+            <div class="input-group">
+              <i class="fas fa-id-card"></i>
+              <input
+                type="text"
+                id="employeeId"
+                class="form-control"
+                placeholder="Enter your employee ID"
+                required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                placeholder="Enter your password"
+                required />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="btn-signin">
+            Sign In
+          </button>
+          <div
+            id="errorMessage"
+            class="error-message">
+            Invalid employee ID or password
+          </div>
+          <div
+            class="loading"
+            id="loading">
+            <i class="fas fa-spinner fa-2x"></i>
+          </div>
+        </form>
+        <div class="signup-link">
+          <p>
+            New employee?
+            <a href="./public/pages/signup.html">Create an account</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="./public/js/auth.js"></script>
+  </body>
+</html>
