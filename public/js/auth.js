@@ -43,16 +43,22 @@ const adminAccount = {
     }
 };
 
-const API_BASE_URL = 'http://localhost:8084/api';
+// API Configuration
+const API_BASE_URL = 'http://localhost:8086/api';
+const API_CONFIG = {
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+};
 
 // Check if server is running
 async function checkServer() {
     try {
-        const response = await fetch(`${API_BASE_URL}/employees`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
+        const response = await fetch(`${API_BASE_URL}/`, {
+            ...API_CONFIG,
+            method: 'GET'
         });
         console.log('Server status:', response.status);
         return response.ok;
@@ -64,7 +70,10 @@ async function checkServer() {
 
 // Example API call
 async function getEmployeeProfile(email) {
-    const response = await fetch(`${API_BASE_URL}/employees/email/${email}`);
+    const response = await fetch(`${API_BASE_URL}/employees/email/${email}`, {
+        ...API_CONFIG,
+        method: 'GET'
+    });
     return response.json();
 }
 
@@ -90,11 +99,8 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
         // Call the backend API
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            ...API_CONFIG,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
             body: JSON.stringify({ employeeId, password })
         });
 

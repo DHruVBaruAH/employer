@@ -1,100 +1,125 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Check if user is logged in
-    const isLoggedIn = localStorage.getItem("isLoggedIn")
-    if (!isLoggedIn) {
-      window.location.href = "index.html"
-      return
+// API Configuration
+const API_BASE_URL = 'http://localhost:8086/api';
+const API_CONFIG = {
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
     }
-  
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) {
+        window.location.href = "index.html";
+        return;
+    }
+
+    try {
+        // Check server connection
+        const response = await fetch(`${API_BASE_URL}/`, {
+            ...API_CONFIG,
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            throw new Error('Server connection failed');
+        }
+
+        // Load initial data
+        await loadEmployeeData();
+    } catch (error) {
+        console.error('Failed to connect to server:', error);
+        // Handle error (show message to user)
+    }
+
     // Set user email from localStorage
-    const userEmail = localStorage.getItem("userEmail")
-    document.getElementById("userEmail").textContent = userEmail
-    document.getElementById("employeeEmail").textContent = userEmail
-  
-    // Load employee data
-    loadEmployeeData()
-  
+    const userEmail = localStorage.getItem("userEmail");
+    document.getElementById("userEmail").textContent = userEmail;
+    document.getElementById("employeeEmail").textContent = userEmail;
+
     // Initialize clock
-    updateClock()
-    setInterval(updateClock, 1000)
-  
+    updateClock();
+    setInterval(updateClock, 1000);
+
     // Initialize calendar
-    renderCalendar()
-  
+    renderCalendar();
+
     // Initialize holiday table
-    renderHolidayTable()
-  
+    renderHolidayTable();
+
     // Event listeners for edit profile
-    document.getElementById("editProfileBtn").addEventListener("click", openEditProfileModal)
-  
+    document.getElementById("editProfileBtn").addEventListener("click", openEditProfileModal);
+
     // Event listeners for modals
-    const modals = document.querySelectorAll(".modal")
-    const closeButtons = document.querySelectorAll(".close-modal")
-  
+    const modals = document.querySelectorAll(".modal");
+    const closeButtons = document.querySelectorAll(".close-modal");
+
     closeButtons.forEach((button) => {
-      button.addEventListener("click", function () {
-        const modal = this.closest(".modal")
-        modal.classList.remove("active")
-      })
-    })
-  
+        button.addEventListener("click", function () {
+            const modal = this.closest(".modal");
+            modal.classList.remove("active");
+        });
+    });
+
     // Close modal when clicking outside
     modals.forEach((modal) => {
-      modal.addEventListener("click", function (e) {
-        if (e.target === this) {
-          this.classList.remove("active")
-        }
-      })
-    })
-  
+        modal.addEventListener("click", function (e) {
+            if (e.target === this) {
+                this.classList.remove("active");
+            }
+        });
+    });
+
     // Edit profile form submission
     document.getElementById("editProfileForm").addEventListener("submit", (e) => {
-      e.preventDefault()
-      updateEmployeeData()
-    })
-  
+        e.preventDefault();
+        updateEmployeeData();
+    });
+
     // Cancel edit button
     document.getElementById("cancelEditBtn").addEventListener("click", () => {
-      document.getElementById("editProfileModal").classList.remove("active")
-    })
-  
+        document.getElementById("editProfileModal").classList.remove("active");
+    });
+
     // Calendar navigation
     document.getElementById("prevMonth").addEventListener("click", () => {
-      const currentMonth = document.getElementById("currentMonth").textContent
-      const [month, year] = currentMonth.split(" ")
-      const date = new Date(`${month} 1, ${year}`)
-      date.setMonth(date.getMonth() - 1)
-      document.getElementById("currentMonth").textContent =
-        `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`
-      renderCalendar()
-    })
-  
+        const currentMonth = document.getElementById("currentMonth").textContent;
+        const [month, year] = currentMonth.split(" ");
+        const date = new Date(`${month} 1, ${year}`);
+        date.setMonth(date.getMonth() - 1);
+        document.getElementById("currentMonth").textContent =
+            `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+        renderCalendar();
+    });
+
     document.getElementById("nextMonth").addEventListener("click", () => {
-      const currentMonth = document.getElementById("currentMonth").textContent
-      const [month, year] = currentMonth.split(" ")
-      const date = new Date(`${month} 1, ${year}`)
-      date.setMonth(date.getMonth() + 1)
-      document.getElementById("currentMonth").textContent =
-        `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`
-      renderCalendar()
-    })
-  
+        const currentMonth = document.getElementById("currentMonth").textContent;
+        const [month, year] = currentMonth.split(" ");
+        const date = new Date(`${month} 1, ${year}`);
+        date.setMonth(date.getMonth() + 1);
+        document.getElementById("currentMonth").textContent =
+            `${date.toLocaleString("default", { month: "long" })} ${date.getFullYear()}`;
+        renderCalendar();
+    });
+
     // Holiday controls
-    document.getElementById("holidayYear").addEventListener("change", renderHolidayTable)
-    document.getElementById("holidayMonth").addEventListener("change", renderHolidayTable)
-  
+    document.getElementById("holidayYear").addEventListener("change", renderHolidayTable);
+    document.getElementById("holidayMonth").addEventListener("change", renderHolidayTable);
+
     // Load profile data
     const profile = JSON.parse(localStorage.getItem('userProfile'));
     const leaveBalance = JSON.parse(localStorage.getItem('leaveBalance'));
     const recentActivity = JSON.parse(localStorage.getItem('recentActivity'));
     const attendance = JSON.parse(localStorage.getItem('attendance'));
-  
+
     // Update profile section
     document.getElementById('profileAvatar').src = profile.avatar;
     document.getElementById('employeeName').textContent = profile.name;
     document.getElementById('employeeId').textContent = profile.id;
     document.getElementById('userEmail').textContent = profile.email;
-  
+
     // Update quick stats
     const quickStats = document.querySelector('.quick-stats');
     quickStats.innerHTML = `
@@ -107,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span>Attendance: ${attendance.percentage}%</span>
         </div>
     `;
-  
+
     // Update leave balance
     const leaveCards = document.querySelector('.leave-cards');
     leaveCards.innerHTML = `
@@ -132,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="leave-label">Available</span>
         </div>
     `;
-  
+
     // Update recent activity
     const activityList = document.querySelector('.activity-list');
     activityList.innerHTML = recentActivity.map(activity => `
@@ -144,91 +169,131 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </div>
     `).join('');
-  })
-  
-  // Sample employee data
-  const employeeData = {
-    id: "CPCG020",
-    name: "Binod Baruah",
-    email: "bbaruah985@gmail.com",
-    phone: "8800332429",
-    gender: "MALE",
-    joiningDate: "01-06-1997",
-    birthDate: "01-10-1971",
-    highestDegree: "Class 10 Pass",
-  }
-  
-  // Load employee data
-  function loadEmployeeData() {
-    // In a real application, you would fetch this data from a server
-    // For this demo, we'll use the sample data
-  
-    document.getElementById("employeeName").textContent = employeeData.name
-    document.getElementById("employeeId").textContent = employeeData.id
-    document.getElementById("employeePhone").textContent = employeeData.phone
-    document.getElementById("employeeEmail").textContent = employeeData.email
-    document.getElementById("employeeGender").textContent = employeeData.gender
-    document.getElementById("employeeJoiningDate").textContent = employeeData.joiningDate
-    document.getElementById("employeeBirthDate").textContent = employeeData.birthDate
-    document.getElementById("employeeDegree").textContent = employeeData.highestDegree
-  
-    // Also update the profile view modal
-    document.getElementById("profileViewName").textContent = employeeData.name
-    document.getElementById("profileViewId").textContent = employeeData.id
-    document.getElementById("profileViewEmail").textContent = employeeData.email
-    document.getElementById("profileViewPhone").textContent = employeeData.phone
-    document.getElementById("profileViewGender").textContent = employeeData.gender
-    document.getElementById("profileViewJoiningDate").textContent = employeeData.joiningDate
-    document.getElementById("profileViewBirthDate").textContent = employeeData.birthDate
-    document.getElementById("profileViewDegree").textContent = employeeData.highestDegree
-  }
-  
-  // Update employee data
-  function updateEmployeeData() {
-    const name = document.getElementById("editName").value
-    const email = document.getElementById("editEmail").value
-    const phone = document.getElementById("editPhone").value
-    const gender = document.getElementById("editGender").value
-    const joiningDate = document.getElementById("editJoiningDate").value
-    const birthDate = document.getElementById("editBirthDate").value
-    const degree = document.getElementById("editDegree").value
-  
-    // Update the employee data object
-    employeeData.name = name
-    employeeData.email = email
-    employeeData.phone = phone
-    employeeData.gender = gender
-    employeeData.joiningDate = joiningDate
-    employeeData.birthDate = birthDate
-    employeeData.highestDegree = degree
-  
-    // Update the UI
-    loadEmployeeData()
-  
-    // Close the modal
-    document.getElementById("editProfileModal").classList.remove("active")
-  
-    // In a real application, you would send this data to a server
-    // For this demo, we'll just update the UI
-  }
-  
-  // Open edit profile modal
-  function openEditProfileModal() {
+});
+
+// Load employee data
+async function loadEmployeeData() {
+    try {
+        const employeeId = localStorage.getItem('employeeId');
+        const response = await fetch(`${API_BASE_URL}/employees/${employeeId}`, {
+            ...API_CONFIG,
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to load employee data');
+        }
+
+        const data = await response.json();
+        updateUIWithEmployeeData(data);
+    } catch (error) {
+        console.error('Error loading employee data:', error);
+        // Handle error (show message to user)
+    }
+}
+
+// Update employee data
+async function updateEmployeeData() {
+    try {
+        const employeeId = localStorage.getItem('employeeId');
+        const updatedData = {
+            name: document.getElementById("editName").value,
+            email: document.getElementById("editEmail").value,
+            phone: document.getElementById("editPhone").value,
+            gender: document.getElementById("editGender").value,
+            joiningDate: document.getElementById("editJoiningDate").value,
+            birthDate: document.getElementById("editBirthDate").value,
+            degree: document.getElementById("editDegree").value
+        };
+
+        const response = await fetch(`${API_BASE_URL}/employees/${employeeId}`, {
+            ...API_CONFIG,
+            method: 'PUT',
+            body: JSON.stringify(updatedData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update employee data');
+        }
+
+        const data = await response.json();
+        updateUIWithEmployeeData(data);
+        document.getElementById("editProfileModal").classList.remove("active");
+    } catch (error) {
+        console.error('Error updating employee data:', error);
+        // Handle error (show message to user)
+    }
+}
+
+// Helper function to update UI with employee data
+function updateUIWithEmployeeData(data) {
+    // Update profile section
+    document.getElementById('profileAvatar').src = data.avatarUrl || 'img/avatar.png';
+    document.getElementById('employeeName').textContent = data.name;
+    document.getElementById('employeeId').textContent = data.employeeId;
+    document.getElementById('employeeEmail').textContent = data.email;
+    document.getElementById('employeePhone').textContent = data.phone;
+    document.getElementById('employeeGender').textContent = data.gender;
+    document.getElementById('employeeJoiningDate').textContent = data.joiningDate;
+    document.getElementById('employeeBirthDate').textContent = data.birthDate;
+    document.getElementById('employeeDegree').textContent = data.degree;
+
+    // Update quick stats
+    const quickStats = document.querySelector('.quick-stats');
+    quickStats.innerHTML = `
+        <div class="stat-item">
+            <i class="fas fa-clock"></i>
+            <span>Today's Status: ${data.currentStatus || 'Present'}</span>
+        </div>
+        <div class="stat-item">
+            <i class="fas fa-calendar-check"></i>
+            <span>Attendance: ${data.attendancePercentage || 100}%</span>
+        </div>
+    `;
+
+    // Update leave balance
+    const leaveCards = document.querySelector('.leave-cards');
+    leaveCards.innerHTML = `
+        <div class="leave-info-item">
+            <h4>Casual Leave</h4>
+            <p class="leave-count">${data.casualLeave || 0}</p>
+            <span class="leave-label">Available</span>
+        </div>
+        <div class="leave-info-item">
+            <h4>Earned Leave</h4>
+            <p class="leave-count">${data.earnedLeave || 0}</p>
+            <span class="leave-label">Available</span>
+        </div>
+        <div class="leave-info-item">
+            <h4>Sick Leave</h4>
+            <p class="leave-count">${data.sickLeave || 0}</p>
+            <span class="leave-label">Available</span>
+        </div>
+        <div class="leave-info-item">
+            <h4>Compensatory Leave</h4>
+            <p class="leave-count">${data.compensatoryLeave || 0}</p>
+            <span class="leave-label">Available</span>
+        </div>
+    `;
+}
+
+// Open edit profile modal
+function openEditProfileModal() {
     // Populate the form with current data
-    document.getElementById("editName").value = employeeData.name
-    document.getElementById("editEmail").value = employeeData.email
-    document.getElementById("editPhone").value = employeeData.phone
-    document.getElementById("editGender").value = employeeData.gender
-    document.getElementById("editJoiningDate").value = employeeData.joiningDate
-    document.getElementById("editBirthDate").value = employeeData.birthDate
-    document.getElementById("editDegree").value = employeeData.highestDegree
-  
+    document.getElementById("editName").value = employeeData.name;
+    document.getElementById("editEmail").value = employeeData.email;
+    document.getElementById("editPhone").value = employeeData.phone;
+    document.getElementById("editGender").value = employeeData.gender;
+    document.getElementById("editJoiningDate").value = employeeData.joiningDate;
+    document.getElementById("editBirthDate").value = employeeData.birthDate;
+    document.getElementById("editDegree").value = employeeData.highestDegree;
+
     // Show the modal
-    document.getElementById("editProfileModal").classList.add("active")
-  }
-  
-  // Clock functionality
-  function updateClock() {
+    document.getElementById("editProfileModal").classList.add("active");
+}
+
+// Clock functionality
+function updateClock() {
     const now = new Date();
     const secondHand = document.querySelector('.second-hand');
     const minuteHand = document.querySelector('.minute-hand');
@@ -258,14 +323,14 @@ document.addEventListener("DOMContentLoaded", () => {
         second: '2-digit'
     });
     digitalTime.textContent = timeString;
-  }
-  
-  // Update clock every second
-  setInterval(updateClock, 1000);
-  updateClock(); // Initial call
-  
-  // Calendar functionality
-  class Calendar {
+}
+
+// Update clock every second
+setInterval(updateClock, 1000);
+updateClock(); // Initial call
+
+// Calendar functionality
+class Calendar {
     constructor() {
         this.date = new Date();
         this.currentMonth = this.date.getMonth();
@@ -395,15 +460,15 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         return icons[type] || 'calendar';
     }
-  }
+}
 
-  // Initialize calendar when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
+// Initialize calendar when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
     new Calendar();
-  });
-  
-  // Render holiday table
-  function renderHolidayTable() {
+});
+
+// Render holiday table
+function renderHolidayTable() {
     const holidayTableBody = document.getElementById("holidayTableBody")
     holidayTableBody.innerHTML = ""
   
