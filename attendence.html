@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System - Attendance</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/attendance.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">HR</div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="profile.html">My Profile</a></li>
+                    <li><a href="attendance.html" class="active">Attendance</a></li>
+                    <li><a href="#">Leave</a></li>
+                    <li><a href="#">Pay Slip</a></li>
+                    <li><a href="#">Movement Order</a></li>
+                    <li><a href="#">TA/DA Advance</a></li>
+                    <li><a href="#">Notice</a></li>
+                    <li><a href="#">Grievance</a></li>
+                </ul>
+            </nav>
+            <div class="user-menu">
+                <div class="user-info">
+                    <img id="userAvatar" src="img/avatar.png" alt="User Avatar" class="avatar">
+                    <span id="userEmail">user@example.com</span>
+                </div>
+                <a href="index.html" class="logout-btn">Logout</a>
+            </div>
+        </header>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <div class="breadcrumb-content">
+                <div class="breadcrumb-path">
+                    <a href="dashboard.html">Home</a> / Attendance
+                </div>
+                <h2 class="page-title">Attendance</h2>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="attendance-container">
+                <!-- Attendance Summary -->
+                <div class="attendance-summary">
+                    <div class="summary-card">
+                        <div class="summary-icon present">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>Present</h3>
+                            <p class="summary-count">18</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon absent">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>Absent</h3>
+                            <p class="summary-count">2</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon late">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>Late</h3>
+                            <p class="summary-count">3</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon leave">
+                            <i class="fas fa-calendar-minus"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>On Leave</h3>
+                            <p class="summary-count">1</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Controls -->
+                <div class="attendance-controls">
+                    <div class="attendance-date-picker">
+                        <label for="attendanceMonth">Month:</label>
+                        <select id="attendanceMonth">
+                            <option value="1">January</option>
+                            <option value="2" selected>February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                        <label for="attendanceYear">Year:</label>
+                        <select id="attendanceYear">
+                            <option value="2024">2024</option>
+                            <option value="2025" selected>2025</option>
+                        </select>
+                    </div>
+                    <div class="attendance-actions">
+                        <button id="markAttendanceBtn" class="btn btn-primary">
+                            <i class="fas fa-user-check"></i> Mark Attendance
+                        </button>
+                        <button id="exportAttendanceBtn" class="btn btn-outline">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Attendance Calendar -->
+                <div class="attendance-calendar">
+                    <div class="calendar-header">
+                        <div>Sunday</div>
+                        <div>Monday</div>
+                        <div>Tuesday</div>
+                        <div>Wednesday</div>
+                        <div>Thursday</div>
+                        <div>Friday</div>
+                        <div>Saturday</div>
+                    </div>
+                    <div id="attendanceCalendar" class="calendar-body">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Attendance Log -->
+                <div class="attendance-log">
+                    <h3>Recent Attendance Log</h3>
+                    <div class="attendance-table-container">
+                        <table class="attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Working Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceLogBody">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mark Attendance Modal -->
+    <div id="markAttendanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Mark Attendance</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="current-time">
+                    <h3>Current Time</h3>
+                    <div id="currentDateTime" class="time-display">Loading...</div>
+                </div>
+                <form id="markAttendanceForm">
+                    <div class="form-group">
+                        <label for="attendanceType">Attendance Type</label>
+                        <select id="attendanceType" name="attendanceType" required>
+                            <option value="checkIn">Check In</option>
+                            <option value="checkOut">Check Out</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="attendanceNote">Note (Optional)</label>
+                        <textarea id="attendanceNote" name="note" rows="3" placeholder="Add any notes about your attendance"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelAttendanceBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/attendance.js"></script>
+</body>
+</html>
+
