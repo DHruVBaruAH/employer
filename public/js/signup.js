@@ -197,7 +197,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
 
         // Handle continue button click
         document.getElementById('continueBtn').addEventListener('click', function() {
-            window.location.href = 'index.html';
+            window.location.href = '/';
         });
 
     } catch (error) {
