@@ -1,275 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
     <title>HR Management System - Leave Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="../css/styles.css" />
     <style>
-        .leave-container {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+      .leave-container {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-        .leave-balance-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+      .leave-balance-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
 
-        .leave-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
+      .leave-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
 
-        .leave-card:hover {
-            transform: translateY(-5px);
-        }
+      .leave-card:hover {
+        transform: translateY(-5px);
+      }
 
-        .leave-type {
-            color: #2c3e50;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
+      .leave-type {
+        color: #2c3e50;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
 
-        .leave-balance {
-            font-size: 2rem;
-            color: #3498db;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
+      .leave-balance {
+        font-size: 2rem;
+        color: #3498db;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
 
-        .leave-description {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
+      .leave-description {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
 
-        .leave-form-container {
-            background: white;
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+      .leave-form-container {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-        .form-title {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
+      .form-title {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+      }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
 
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
+      .form-group.full-width {
+        grid-column: 1 / -1;
+      }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-            font-weight: 500;
-        }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: 500;
+      }
 
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
+      .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
 
-        .form-control:focus {
-            outline: none;
-            border-color: #3498db;
-        }
+      .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+      }
 
-        .btn-apply {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+      .btn-apply {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
 
-        .btn-apply:hover {
-            background: #2980b9;
-        }
+      .btn-apply:hover {
+        background: #2980b9;
+      }
 
-        .leave-history {
-            margin-top: 2rem;
-        }
+      .leave-history {
+        margin-top: 2rem;
+      }
 
-        .history-title {
-            color: #2c3e50;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
+      .history-title {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
 
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+      .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-        .history-table th,
-        .history-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
+      .history-table th,
+      .history-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
 
-        .history-table th {
-            background: #f8f9fa;
-            color: #2c3e50;
-            font-weight: 500;
-        }
+      .history-table th {
+        background: #f8f9fa;
+        color: #2c3e50;
+        font-weight: 500;
+      }
 
-        .status-pending {
-            color: #f39c12;
-        }
+      .status-pending {
+        color: #f39c12;
+      }
 
-        .status-approved {
-            color: #27ae60;
-        }
+      .status-approved {
+        color: #27ae60;
+      }
 
-        .status-rejected {
-            color: #e74c3c;
-        }
+      .status-rejected {
+        color: #e74c3c;
+      }
 
-        .error-message {
-            color: #e74c3c;
-            margin-top: 0.5rem;
-            display: none;
-        }
+      .error-message {
+        color: #e74c3c;
+        margin-top: 0.5rem;
+        display: none;
+      }
 
-        .success-message {
-            color: #27ae60;
-            margin-top: 0.5rem;
-            display: none;
-        }
+      .success-message {
+        color: #27ae60;
+        margin-top: 0.5rem;
+        display: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-title">HR Management System</div>
-            <nav class="nav-links">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="profile.html">Profile</a>
-                <a href="attendance.html">Attendance</a>
-                <a href="leave.html" class="active">Leave</a>
-            </nav>
-            <div class="user-menu">
-                <span id="userEmail"></span>
-                <a href="index.html" class="logout-btn">Logout</a>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <div class="leave-container">
-            <div class="leave-balance-grid">
-                <div class="leave-card">
-                    <div class="leave-type">Casual Leave</div>
-                    <div class="leave-balance" id="casualLeaveBalance">12</div>
-                    <div class="leave-description">Short duration leave for personal matters</div>
-                </div>
-                <div class="leave-card">
-                    <div class="leave-type">Earned Leave</div>
-                    <div class="leave-balance" id="earnedLeaveBalance">15</div>
-                    <div class="leave-description">Accumulated leave based on service duration</div>
-                </div>
-                <div class="leave-card">
-                    <div class="leave-type">Sick Leave</div>
-                    <div class="leave-balance" id="sickLeaveBalance">7</div>
-                    <div class="leave-description">Leave for medical reasons with documentation</div>
-                </div>
-                <div class="leave-card">
-                    <div class="leave-type">Compensatory Leave</div>
-                    <div class="leave-balance" id="compensatoryLeaveBalance">3</div>
-                    <div class="leave-description">Leave earned for working on holidays</div>
-                </div>
-            </div>
-
-            <div class="leave-form-container">
-                <h2 class="form-title">Apply for Leave</h2>
-                <form id="leaveForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="leaveType">Leave Type</label>
-                            <select id="leaveType" class="form-control" required>
-                                <option value="">Select leave type</option>
-                                <option value="casual">Casual Leave</option>
-                                <option value="earned">Earned Leave</option>
-                                <option value="sick">Sick Leave</option>
-                                <option value="compensatory">Compensatory Leave</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="duration">Duration (Days)</label>
-                            <input type="number" id="duration" class="form-control" min="1" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="startDate">Start Date</label>
-                            <input type="date" id="startDate" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="endDate">End Date</label>
-                            <input type="date" id="endDate" class="form-control" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="reason">Reason for Leave</label>
-                            <textarea id="reason" class="form-control" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-apply">Submit Leave Application</button>
-                    <div id="errorMessage" class="error-message"></div>
-                    <div id="successMessage" class="success-message"></div>
-                </form>
-            </div>
-
-            <div class="leave-history">
-                <h2 class="history-title">Leave History</h2>
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>Leave Type</th>
-                            <th>Duration</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaveHistory">
-                        <!-- Leave history will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
+      <!-- Header -->
+      <header class="header">
+        <div class="header-title">HR Management System</div>
+        <nav class="nav-links">
+          <a href="./dashboard.html">Dashboard</a>
+          <a href="./profile.html">Profile</a>
+          <a href="./attendance.html">Attendance</a>
+          <a href="./leave.html" class="active">Leave</a>
+        </nav>ef="./leave.html"
+        <div class="user-menu">
+          <span id="userEmail"></span>
+          <a href="../index.html" class="logout-btn">Logout</a>
         </div>
+      </header>ass="user-menu">
+          <span id="userEmail"></span>
+      <!-- Main Content -->
+      <div class="leave-container">
+        <div class="leave-balance-grid">
+          <div class="leave-card">
+            <div class="leave-type">Casual Leave</div>
+            <div
+              class="leave-balance"
+              id="casualLeaveBalance">
+              12Content -->
+            </div>leave-container">
+            <div class="leave-description">
+              Short duration leave for personal matters
+            </div>lass="leave-type">Casual Leave</div>
+          </div>
+          <div class="leave-card">"
+            <div class="leave-type">Earned Leave</div>
+            <div
+              class="leave-balance"
+              id="earnedLeaveBalance">ion">
+              15ort duration leave for personal matters
+            </div>
+            <div class="leave-description">
+              Accumulated leave based on service duration
+            </div>lass="leave-type">Earned Leave</div>
+          </div>
+          <div class="leave-card">"
+            <div class="leave-type">Sick Leave</div>
+            <div
+              class="leave-balance"
+              id="sickLeaveBalance">ption">
+              7ccumulated leave based on service duration
+            </div>
+            <div class="leave-description">
+              Leave for medical reasons with documentation
+            </div>lass="leave-type">Sick Leave</div>
+          </div>
+          <div class="leave-card">"
+            <div class="leave-type">Compensatory Leave</div>
+            <div
+              class="leave-balance"
+              id="compensatoryLeaveBalance">
+              3eave for medical reasons with documentation
+            </div>
+            <div class="leave-description">
+              Leave earned for working on holidays
+            </div>lass="leave-type">Compensatory Leave</div>
+          </div>
+        </div>class="leave-balance"
+              id="compensatoryLeaveBalance">
+        <div class="leave-form-container">
+          <h2 class="form-title">Apply for Leave</h2>
+          <form id="leaveForm">escription">
+            <div class="form-grid">ing on holidays
+              <div class="form-group">
+                <label for="leaveType">Leave Type</label>
+                <select
+                  id="leaveType"
+                  class="form-control"er">
+                  required>itle">Apply for Leave</h2>
+                  <option value="">Select leave type</option>
+                  <option value="casual">Casual Leave</option>
+                  <option value="earned">Earned Leave</option>
+                  <option value="sick">Sick Leave</option>
+                  <option value="compensatory">Compensatory Leave</option>
+                </select>veType"
+              </div>ass="form-control"
+              <div class="form-group">
+                <label for="duration">Duration (Days)</label>
+                <inpution value="casual">Casual Leave</option>
+                  type="number"="earned">Earned Leave</option>
+                  id="duration"="sick">Sick Leave</option>
+                  class="form-control"nsatory">Compensatory Leave</option>
+                  min="1"
+                  required />
+              </div>lass="form-group">
+              <div class="form-group">Duration (Days)</label>
+                <label for="startDate">Start Date</label>
+                <input="number"
+                  type="date"n"
+                  id="startDate"ntrol"
+                  class="form-control"
+                  required />
+              </div>
+              <div class="form-group">
+                <label for="endDate">End Date</label>bel>
+                <input
+                  type="date"
+                  id="endDate"e"
+                  class="form-control"
+                  required />
+              </div>
+              <div class="form-group full-width">
+                <label for="reason">Reason for Leave</label>
+                <textarea
+                  id="reason"
+                  class="form-control"
+                  rows="4"orm-control"
+                  required></textarea>
+              </div>
+            </div> class="form-group full-width">
+            <buttonbel for="reason">Reason for Leave</label>
+              type="submit"
+              class="btn-apply">
+              Submit Leave Application
+            </button>s="4"
+            <div  required></textarea>
+              id="errorMessage"
+              class="error-message"></div>
+            <divton
+              id="successMessage"
+              class="success-message"></div>
+          </form>mit Leave Application
+        </div>button>
+            <div
+        <div class="leave-history">
+          <h2 class="history-title">Leave History</h2>
+          <table class="history-table">
+            <thead>uccessMessage"
+              <tr>s="success-message"></div>
+                <th>Leave Type</th>
+                <th>Duration</th>
+                <th>Start Date</th>
+                <th>End Date</th>">
+                <th>Status</th>tle">Leave History</h2>
+              </tr>ass="history-table">
+            </thead>
+            <tbody id="leaveHistory">
+              <!-- Leave history will be populated by JavaScript -->
+            </tbody>Duration</th>
+          </table>h>Start Date</th>
+        </div>  <th>End Date</th>
+      </div>    <th>Status</th>
+    </div>    </tr>
+    <script src="../js/leave.js"></script>
+  </body>   <tbody id="leaveHistory">
+</html>       <!-- Leave history will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     <script src="../js/leave.js"></script>
-</body>
-</html> 
+  </body>
+</html>
