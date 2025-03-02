@@ -82,29 +82,42 @@ document.getElementById('signupForm').addEventListener('submit', async function(
     loading.style.display = 'block';
     
     try {
-        // Get form data
-        const formData = {
-            name: document.getElementById('fullName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            gender: document.getElementById('gender').value,
-            department: document.getElementById('department').value,
-            designation: document.getElementById('designation').value,
-            employmentType: document.getElementById('employeeType').value,
-            joiningDate: document.getElementById('joiningDate').value,
-            birthDate: document.getElementById('birthDate').value,
-            degree: document.getElementById('degree').value,
-            address: document.getElementById('address').value,
-            institution: document.getElementById('institution').value,
-            password: document.getElementById('password').value
+        // Get form data safely
+        const formData = {};
+        
+        // Helper function to safely get value
+        const safeGetValue = (id) => {
+            const element = document.getElementById(id);
+            if (!element) {
+                console.error(`Element with ID '${id}' not found in the DOM`);
+                return '';
+            }
+            return element.value;
         };
-
+        
+        // Get values using the exact IDs from the HTML
+        const fullName = safeGetValue('fullName');
+        formData.name = fullName; // For API
+        formData.fullName = fullName; // For local storage
+        formData.email = safeGetValue('email');
+        formData.phone = safeGetValue('phone');
+        formData.gender = safeGetValue('gender');
+        formData.department = safeGetValue('department');
+        formData.designation = safeGetValue('designation');
+        formData.employmentType = safeGetValue('employeeType');
+        formData.joiningDate = safeGetValue('joiningDate');
+        formData.birthDate = safeGetValue('birthDate');
+        formData.degree = safeGetValue('degree');
+        formData.address = safeGetValue('address');
+        formData.institution = safeGetValue('institution');
+        formData.password = safeGetValue('password');
+        
         // Generate employee ID based on department
-        const employeeId = generateEmployeeId(formData.department);
+        const employeeId = generateEmployeeId(formData.department || 'DEF');
         formData.employeeId = employeeId;
 
         // Validate password
-        const confirmPassword = document.getElementById('confirmPassword').value;
+        const confirmPassword = safeGetValue('confirmPassword');
         if (formData.password !== confirmPassword) {
             throw new Error('Passwords do not match');
         }
@@ -112,6 +125,8 @@ document.getElementById('signupForm').addEventListener('submit', async function(
         if (!validatePassword(formData.password)) {
             throw new Error('Password must be at least 8 characters long and contain uppercase, lowercase, numbers, and special characters');
         }
+
+        console.log("Submitting form data:", formData);
 
         // Call the backend API
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -134,7 +149,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             
             // Store profile data
             const profileData = {
-                name: formData.name,
+                name: formData.fullName,
                 id: employeeId,
                 email: formData.email,
                 phone: formData.phone,
@@ -151,7 +166,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             localStorage.setItem('userProfile', JSON.stringify(profileData));
             
             // Redirect to dashboard
-            window.location.href = '../index.html';
+            window.location.href = './dashboard.html';
         } else {
             throw new Error(data.message || 'Registration failed');
         }
