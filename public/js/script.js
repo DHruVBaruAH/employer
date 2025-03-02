@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("isLoggedIn", "true")
 
     // Redirect to dashboard
-    window.location.href = "dashboard.html"
+    window.location.href = "./pages/dashboard.html"
   })
 })
 
