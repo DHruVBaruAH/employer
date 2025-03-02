@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Check if user is logged in
     if (!localStorage.getItem('isLoggedIn')) {
-        window.location.href = 'index.html';
+        window.location.href = '../../index.html';
     }
   
     // Get user profile data

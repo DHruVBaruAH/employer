@@ -1,3 +1,4 @@
+import {API_BASE_URL} from '../constant/constant.js'
 document.addEventListener("DOMContentLoaded", () => {
     // Check if user is logged in
     const isLoggedIn = localStorage.getItem("isLoggedIn")

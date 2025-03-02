@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:8086/api';
+import {API_BASE_URL} from '../constant/constant.js'
 const API_CONFIG = {
     credentials: 'include',
     headers: {

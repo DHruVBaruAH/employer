@@ -1,4 +1,5 @@
 // User Profile Management
+import {API_BASE_URL} from '../constant/constant.js'
 const UserProfile = {
     // Default profile data
     defaultProfile: {

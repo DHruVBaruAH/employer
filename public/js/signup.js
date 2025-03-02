@@ -1,4 +1,5 @@
 // Handle avatar preview and compression
+import {API_BASE_URL} from '../constant/constant.js'
 function compressImage(base64String, maxWidth = 200) {
     return new Promise((resolve) => {
         const img = new Image();
@@ -61,7 +62,6 @@ function validatePassword(password) {
 }
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:8086/api';
 const API_CONFIG = {
     credentials: 'include',
     headers: {
@@ -166,7 +166,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             localStorage.setItem('userProfile', JSON.stringify(profileData));
             
             // Redirect to dashboard
-            window.location.href = './dashboard.html';
+            window.location.href = './index.html';
         } else {
             throw new Error(data.message || 'Registration failed');
         }

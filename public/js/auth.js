@@ -1,4 +1,5 @@
 // Default admin account
+import {API_BASE_URL} from '../constant/constant.js'
 const adminAccount = {
     'CPCG020': {
         password: 'password123', // In real app, this would be hashed
@@ -44,7 +45,6 @@ const adminAccount = {
 };
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:8086/api';
 const API_CONFIG = {
     credentials: 'include',
     headers: {
