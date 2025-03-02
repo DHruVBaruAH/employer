@@ -151,7 +151,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             localStorage.setItem('userProfile', JSON.stringify(profileData));
             
             // Redirect to dashboard
-            window.location.href = './dashboard.html';
+            window.location.href = '../index.html';
         } else {
             throw new Error(data.message || 'Registration failed');
         }
