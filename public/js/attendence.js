@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check if user is logged in
     const isLoggedIn = localStorage.getItem("isLoggedIn")
     if (!isLoggedIn) {
-      window.location.href = "index.html"
+      window.location.href = "../../index.html"
       return
     }
   

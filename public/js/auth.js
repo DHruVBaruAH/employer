@@ -94,7 +94,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         // Check if server is running
         const serverRunning = await checkServer();
         if (!serverRunning) {
-            throw new Error('Unable to connect to server. Please ensure the server is running.');
+            throw new Error('Unable to connect to server. Please ensure the server is running on port 8086.');
         }
 
         // Call the backend API
@@ -188,8 +188,64 @@ async function registerAdminAccount() {
             return;
         }
 
+        // Try to login with the admin account using different password combinations
+        // The data.sql file has a BCrypt hashed password, so we need to try the actual password
+        const possiblePasswords = [
+            'admin', 'admin123', 'password', 'password123', 'Admin123', 'admin@123'
+        ];
+        
+        let adminExists = false;
+        
+        // First try the default admin credentials from data.sql (admin@hrms.com)
+        for (const testPassword of possiblePasswords) {
+            try {
+                console.log(`Trying admin login with password: ${testPassword}`);
+                const loginResponse = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        employeeId: 'ADMIN001', 
+                        password: testPassword 
+                    })
+                });
+                
+                if (loginResponse.ok) {
+                    console.log('Admin login successful with password:', testPassword);
+                    adminExists = true;
+                    
+                    // Update the note on the login page to show the correct password
+                    const loginNote = document.querySelector('.signup-link p.mt-2 small');
+                    if (loginNote) {
+                        loginNote.textContent = `Default admin: ADMIN001 / ${testPassword}`;
+                    }
+                    
+                    break;
+                }
+                
+                const errorData = await loginResponse.json();
+                console.log('Login attempt failed:', errorData.message);
+                
+                // If the error is "Employee not found", then the admin doesn't exist
+                if (errorData.message === 'Employee not found') {
+                    break;
+                }
+            } catch (error) {
+                console.log('Error during login attempt:', error);
+            }
+        }
+        
+        if (adminExists) {
+            console.log('Admin account exists and login successful');
+            return { success: true, message: 'Admin account already exists' };
+        }
+
+        // If we get here, try to register a new admin account
+        console.log('Admin account not found or login failed, attempting to register');
         const admin = {
-            employeeId: 'CPCG020',
+            employeeId: 'ADMIN002',
             password: 'password123',
             name: 'Dhruv Baruah',
             email: 'dbaruah985@gmail.com',
@@ -200,8 +256,14 @@ async function registerAdminAccount() {
             degree: 'Class 10 Pass',
             department: 'Administration',
             designation: 'Admin',
-            employmentType: 'Full-time',
-            avatarUrl: 'img/avatar.png'
+            employmentType: 'FULL_TIME',
+            avatarUrl: 'img/avatar.png',
+            casualLeave: 12,
+            earnedLeave: 15,
+            sickLeave: 7,
+            compensatoryLeave: 3,
+            attendancePercentage: 100,
+            currentStatus: 'PRESENT'
         };
 
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -218,6 +280,17 @@ async function registerAdminAccount() {
                 throw new Error('Registration endpoint not found');
             }
             const errorData = await response.json();
+            
+            // If the error is about duplicate email or employee ID, it means the admin already exists
+            if (errorData.message && (
+                errorData.message.includes('Email already exists') || 
+                errorData.message.includes('Employee ID already exists') ||
+                errorData.message.includes('Unique index or primary key violation')
+            )) {
+                console.log('Admin account already exists (detected from error)');
+                return { success: true, message: 'Admin account already exists' };
+            }
+            
             throw new Error(errorData.message || 'Registration failed');
         }
 
@@ -230,7 +303,7 @@ async function registerAdminAccount() {
         
         return data;
     } catch (error) {
-        console.error('Failed to register admin:', error.message);
+        console.error('Failed to register admin:', error);
         // Don't throw the error, just log it
         return null;
     }

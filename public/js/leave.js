@@ -1,6 +1,6 @@
 // Check if user is logged in
 if (!localStorage.getItem('isLoggedIn')) {
-    window.location.href = 'index.html';
+    window.location.href = '../../index.html';
 }
 
 // Get employee ID and profile data

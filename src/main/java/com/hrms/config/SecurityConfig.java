@@ -25,7 +25,11 @@ public class SecurityConfig {
         http
             .cors().and()
             .csrf().disable()
+            .headers(headers -> headers
+                .frameOptions().sameOrigin()
+            )
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/**").permitAll()
             );
         
@@ -39,8 +43,11 @@ public class SecurityConfig {
             "https://dhruvbaruah.github.io",
             "http://localhost:3000",
             "http://localhost:5000",
+            "http://localhost:8086",
+            "http://localhost:5501",
             "http://127.0.0.1:3000",
-            "http://127.0.0.1:5000"
+            "http://127.0.0.1:5000",
+            "http://127.0.0.1:5501"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
