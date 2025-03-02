@@ -84,19 +84,34 @@ document.getElementById('signupForm').addEventListener('submit', async function(
     try {
         // Get form data
         const formData = {
-            employeeId: document.getElementById('employeeId').value,
-            password: document.getElementById('password').value,
-            name: document.getElementById('name').value,
+            name: document.getElementById('fullName').value,
             email: document.getElementById('email').value,
             phone: document.getElementById('phone').value,
             gender: document.getElementById('gender').value,
             department: document.getElementById('department').value,
             designation: document.getElementById('designation').value,
-            employmentType: document.getElementById('employmentType').value,
+            employmentType: document.getElementById('employeeType').value,
             joiningDate: document.getElementById('joiningDate').value,
             birthDate: document.getElementById('birthDate').value,
-            degree: document.getElementById('degree').value
+            degree: document.getElementById('degree').value,
+            address: document.getElementById('address').value,
+            institution: document.getElementById('institution').value,
+            password: document.getElementById('password').value
         };
+
+        // Generate employee ID based on department
+        const employeeId = generateEmployeeId(formData.department);
+        formData.employeeId = employeeId;
+
+        // Validate password
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (formData.password !== confirmPassword) {
+            throw new Error('Passwords do not match');
+        }
+
+        if (!validatePassword(formData.password)) {
+            throw new Error('Password must be at least 8 characters long and contain uppercase, lowercase, numbers, and special characters');
+        }
 
         // Call the backend API
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -115,12 +130,12 @@ document.getElementById('signupForm').addEventListener('submit', async function(
         if (data.success) {
             // Store authentication state
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('employeeId', formData.employeeId);
+            localStorage.setItem('employeeId', employeeId);
             
             // Store profile data
             const profileData = {
                 name: formData.name,
-                id: formData.employeeId,
+                id: employeeId,
                 email: formData.email,
                 phone: formData.phone,
                 gender: formData.gender,
@@ -136,7 +151,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             localStorage.setItem('userProfile', JSON.stringify(profileData));
             
             // Redirect to dashboard
-            window.location.href = './public/pages/dashboard.html';
+            window.location.href = './dashboard.html';
         } else {
             throw new Error(data.message || 'Registration failed');
         }
