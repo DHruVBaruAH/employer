@@ -136,7 +136,7 @@ document.getElementById('signupForm').addEventListener('submit', async function(
             localStorage.setItem('userProfile', JSON.stringify(profileData));
             
             // Redirect to dashboard
-            window.location.href = '../../index.html';
+            window.location.href = './dashboard.html';
         } else {
             throw new Error(data.message || 'Registration failed');
         }

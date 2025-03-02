@@ -133,7 +133,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
                 department: data.employee.department,
                 designation: data.employee.designation,
                 employmentType: data.employee.employmentType,
-                avatar: data.employee.avatarUrl || './img/avatar.png'
+                avatar: data.employee.avatarUrl || './public/img/avatar.png'
             };
             
             // Store additional dashboard data
@@ -154,7 +154,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             localStorage.setItem('userProfile', JSON.stringify(profileData));
             
             // Redirect to dashboard
-            window.location.href = './dashboard.html';
+            window.location.href = './public/pages/dashboard.html';
         } else {
             throw new Error(data.message || 'Login failed. Please check your credentials.');
         }
